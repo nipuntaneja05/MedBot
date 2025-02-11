@@ -17,7 +17,7 @@ device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 # Load embedding model correctly
 embedding_model = HuggingFaceEmbeddings(model_name="sentence-transformers/all-MiniLM-L6-v2")
 
-# Set Pinecone API Key
+# Set Pinecone API key (Ensure this is set correctly)
 PINECONE_API_KEY = "pcsk_6hfbZM_PyDhaPVXZs1H5ddoLnsEWx7iNai3SZR8Mfbgsf59yEKteEmXsiatUEu5q2RPML2"
 if not PINECONE_API_KEY:
     raise ValueError("Pinecone API Key is missing. Set it in the environment or in the script.")
@@ -27,12 +27,10 @@ pc = Pinecone(api_key=PINECONE_API_KEY)
 
 index_name = "medbot"
 
-# Check if Pinecone index exists (Fix: Extract index names correctly)
-existing_indexes = [index["name"] for index in pc.list_indexes()]
-if index_name not in existing_indexes:
+# Check if Pinecone index exists
+if index_name not in pc.list_indexes():
     raise ValueError(f"Pinecone index '{index_name}' does not exist. Create it in Pinecone.")
 
-# Initialize Pinecone Vector Store
 vector_store = PineconeVectorStore(
     index_name=index_name,
     embedding=embedding_model,
@@ -54,11 +52,8 @@ class QueryRequest(BaseModel):
 # Define API Endpoint
 @app.post("/query")
 async def query_model(request: QueryRequest):
-    try:
-        response = qa_chain.invoke({"query": request.question})  # Fix: Use .invoke()
-        return {"answer": response}
-    except Exception as e:
-        return {"error": str(e)}
+    response = qa_chain.run(request.question)
+    return {"answer": response}
 
 # Run FastAPI
 if __name__ == "__main__":

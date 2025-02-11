@@ -72,10 +72,6 @@ async def query_model(request: QueryRequest):
         return {"answer": response}
     except Exception as e:
         return {"error": str(e)}
-    
-@app.get("/")
-async def root():
-    return {"message": "Backend is running with CORS enabled"}
 
 # Run FastAPI
 if __name__ == "__main__":

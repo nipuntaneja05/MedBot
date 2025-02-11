@@ -1,0 +1,23 @@
+pip==25.0.1
+setuptools>=68.0.0
+wheel>=0.40.0
+
+# Core dependencies
+sentence-transformers>=2.6.0  # Updated to satisfy langchain-huggingface
+torch>=2.0.0
+
+# LangChain dependencies
+langchain==0.0.350  # Ensures compatibility
+langchain-core>=0.1, <0.2  # Matches langchain-groq
+langchain-groq==0.0.1
+langchain-huggingface==0.0.3  # Downgraded for compatibility
+langchain-experimental
+langchain-community
+langchain-pinecone
+
+# Pinecone
+pinecone-client
+
+# Web Framework
+fastapi
+uvicorn
